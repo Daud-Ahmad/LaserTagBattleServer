@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://daud_ahmad:1122@cluster0-qu7uf.mongodb.net/test?retryWrites=true&w=majority",
+  "secritValue": "laser_tag_battle"
+}
