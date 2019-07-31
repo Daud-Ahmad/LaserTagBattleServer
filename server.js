@@ -51,6 +51,14 @@ io.on('connection', socket => {
     socket.broadcast.emit('sendToStartPlayer', playerName + ':' + playerEmail);
   });
 
+  socket.on('cancelInvitation', function() {
+    socket.broadcast.emit('sendToStartPlayer', 'invitation_cancel');
+  });
+
+  socket.on('player_not_found', function() {
+    socket.broadcast.emit('sendToStartPlayer', 'player_not_founded');
+  });
+
   socket.on('startGame', function() {
     socket.broadcast.emit('allInviteGameStart', 'startNow');
   });
