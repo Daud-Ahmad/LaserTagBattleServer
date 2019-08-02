@@ -19,9 +19,10 @@ router.post('/UpdateProfile', auth, async (req, res) => {
     if (email) profileField.email = email;
     if (phone) profileField.phone = phone;
 
-    if (profileField) {
+    const user = await User.findOne({ _id: req.user.id });
+    if (user) {
       profile = await User.findOneAndUpdate(
-        req.user.id,
+        { _id: req.user.id },
         { $set: profileField },
         { new: true }
       );
@@ -56,17 +57,20 @@ router.post(
 
       let { new_password } = req.body;
 
-      const salt = await bcrypt.genSalt(10);
+      let user = await User.findOne({ _id: req.user.id });
+      if (user) {
+        const salt = await bcrypt.genSalt(10);
 
-      const changePass = {};
-      changePass.password = await bcrypt.hash(new_password, salt);
+        const changePass = {};
+        changePass.password = await bcrypt.hash(new_password, salt);
 
-      const updateProfile = await User.findOneAndUpdate(req.user.id, {
-        $set: changePass
-      });
-
-      return res.json(updateProfile);
-      //   }
+        const updateProfile = await User.findOneAndUpdate(
+          { _id: req.user.id },
+          { $set: changePass },
+          { new: true }
+        );
+        return res.json(updateProfile);
+      }
     } catch (err) {
       res.status(500).send('server error');
     }
