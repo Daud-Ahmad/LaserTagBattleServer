@@ -6,6 +6,8 @@ const express = require('express'),
 
 const individualPlayer = require('./models/IndividualPlayers');
 
+const individual_playing = require('./socket_communication/individuals_playing_comm');
+
 app.get('/', (req, res) => {
   res.send('Chat Server is running on port 3000');
 });
@@ -23,6 +25,10 @@ app.use('/api/auth/', require('./routs/api/auth'));
 app.use('/api/individualPlayer', require('./routs/api/individualPlayerApi'));
 app.use('/api/profile', require('./routs/api/profile'));
 app.use('/api/users', require('./routs/api/users'));
+app.use('/api/teamPlayerApi', require('./routs/api/teamPlayersApi'));
+
+// socket communication
+// individual_playing();
 
 io.on('connection', socket => {
   console.log('user connected');
@@ -32,10 +38,12 @@ io.on('connection', socket => {
     let myInfo = await User.findOne({ email: myEmail });
 
     if (!user) {
-      return socket.broadcast.emit('findPlayer', 'user not available');
+      console.log('user_not_available');
+      return socket.broadcast.emit('findPlayer', 'user_not_available');
     }
 
     if (!myInfo) {
+      console.log('i not available');
       return socket.broadcast.emit('findPlayer', 'i not available');
     }
 
@@ -77,6 +85,15 @@ io.on('connection', socket => {
     } catch (err) {
       socket.broadcast.emit('individualWinnerPlayer', 'errrror');
     }
+  });
+
+  socket.on('deletedAllIndividualsPlayers', async function() {
+    try {
+      socket.broadcast.emit(
+        'send_to_waiting_players',
+        'go_back_to_main_dashboard'
+      );
+    } catch (err) {}
   });
 });
 

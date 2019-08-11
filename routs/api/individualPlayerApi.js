@@ -101,12 +101,31 @@ router.post(
   }
 );
 
+//@route DELETE api/individualPlayerApi/DeletePlayerAll/:id
+//@desc delete all individual players
+//@access public
+router.delete(
+  '/DeletePlayerAll',
+
+  async (req, res) => {
+    try {
+      await IndividualPlayers.deleteMany({}, function(err, obj) {
+        if (err) throw err;
+        console.log(' document(s) deleted');
+      });
+
+      return res.json({ message: 'Collection deleted' });
+    } catch (err) {
+      res.status(500).send('server error');
+    }
+  }
+);
+
 //@route DELETE api/individualPlayerApi/DeletePlayer/:id
 //@desc delete individual player
 //@access private
 router.delete(
   '/DeletePlayer/:id',
-  auth,
 
   async (req, res) => {
     try {

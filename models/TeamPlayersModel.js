@@ -5,14 +5,6 @@ const TeamPlayerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user'
   },
-  isAlive: {
-    type: Boolean,
-    default: true
-  },
-  irId: {
-    type: String,
-    required: true
-  },
   killBy: {
     type: String
   },
@@ -22,7 +14,4 @@ const TeamPlayerSchema = new mongoose.Schema({
   }
 });
 
-module.exports = TeamPlayerSchema = mongoose.model(
-  'teamPlayers',
-  TeamPlayerSchema
-);
+module.exports = TeamPlayer = mongoose.model('teamPlayers', TeamPlayerSchema);
