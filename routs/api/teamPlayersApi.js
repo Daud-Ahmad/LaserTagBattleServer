@@ -43,4 +43,43 @@ router.post(
   }
 );
 
+//@route DELETE api/teamPlayerApi/DeletePlayerAll
+//@desc delete all team players
+//@access public
+router.delete(
+  '/DeletePlayerAll',
+
+  async (req, res) => {
+    try {
+      await teamPlayerModel.deleteMany({}, function(err, obj) {
+        if (err) throw err;
+        console.log(' document(s) deleted');
+      });
+
+      return res.json({ message: 'Collection deleted' });
+    } catch (err) {
+      res.status(500).send('server error');
+    }
+  }
+);
+
+//@route Get api/teamPlayerApi/GetAllPlayers
+//@desc get All team players
+//@access public
+router.get(
+  '/GetAllPlayers',
+
+  async (req, res) => {
+    try {
+      const team = await teamPlayerModel
+        .find()
+        .populate('user', ['name', 'email']);
+
+      res.json(team);
+    } catch (err) {
+      res.status(500).send('server error');
+    }
+  }
+);
+
 module.exports = router;

@@ -95,6 +95,51 @@ io.on('connection', socket => {
       );
     } catch (err) {}
   });
+
+  //team playing communication
+
+  socket.on('deletedAllTeamPlayers', async function() {
+    try {
+      socket.broadcast.emit(
+        'send_to_waiting_players',
+        'go_back_to_main_dashboard'
+      );
+    } catch (err) {}
+  });
+
+  socket.on('player_email_for_team', async function(playerEmail, myEmail) {
+    let user = await User.findOne({ email: playerEmail });
+    let myInfo = await User.findOne({ email: myEmail });
+
+    if (!user) {
+      console.log('user_not_available');
+      return socket.broadcast.emit('findPlayer_for_team', 'user_not_available');
+    }
+
+    if (!myInfo) {
+      console.log('i not available');
+      return socket.broadcast.emit('findPlayer_for_team', 'i not available');
+    }
+
+    socket.broadcast.emit(
+      'findPlayer_for_team',
+      playerEmail + ':' + myInfo.name
+    );
+  });
+
+  socket.on('player_not_found_for_team', function() {
+    socket.broadcast.emit(
+      'sendToStartPlayer_for_team',
+      'player_not_founded_for_team'
+    );
+  });
+
+  socket.on('acceptInvitationTeam', function(playerName, playerEmail) {
+    socket.broadcast.emit(
+      'sendToStartPlayerTeam',
+      playerName + ':' + playerEmail
+    );
+  });
 });
 
 const PORT = process.env.PORT || 5000;

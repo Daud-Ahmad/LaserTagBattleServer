@@ -101,7 +101,7 @@ router.post(
   }
 );
 
-//@route DELETE api/individualPlayerApi/DeletePlayerAll/:id
+//@route DELETE api/individualPlayerApi/DeletePlayerAll
 //@desc delete all individual players
 //@access public
 router.delete(
