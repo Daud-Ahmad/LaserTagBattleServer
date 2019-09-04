@@ -129,7 +129,7 @@ io.on('connection', socket => {
 
   socket.on('player_not_found_for_team', function() {
     socket.broadcast.emit(
-      'sendToStartPlayer_for_team',
+      'sendToStartPlayerTeam',
       'player_not_founded_for_team'
     );
   });
@@ -139,6 +139,10 @@ io.on('connection', socket => {
       'sendToStartPlayerTeam',
       playerName + ':' + playerEmail
     );
+  });
+
+  socket.on('cancelInvitationTeam', function() {
+    socket.broadcast.emit('sendToStartPlayerTeam', 'invitation_cancel');
   });
 });
 
